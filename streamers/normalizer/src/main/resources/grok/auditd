@@ -1,0 +1,13 @@
+# Common data
+DATA .*?
+GREEDYDATA .*
+INT (?:[+-]?(?:[0-9]+))
+QUOTEDSTRING (?>(?<!\\)(?>"(?>\\.|[^\\"]+)+"|""|(?>'(?>\\.|[^\\']+)+')|''|(?>`(?>\\.|[^\\`]+)+`)|``))
+# Common auditD parsing
+AUDITD_TIMESTAMP %{INT:msg_timestamp}.%{INT}
+AUDITD_HEADER audit\(%{AUDITD_TIMESTAMP}:%{INT:msg_id}\)
+AUDITD_MESSAGE_TYPE [A-Z_]+
+AUDITD_TYPE type=%{AUDITD_MESSAGE_TYPE:type}
+# AVC type specific message parsing
+AUDITD_AVC_INTERACTION_STATUS (denied|granted)
+AUDITD_AVC type=AVC msg=%{AUDITD_HEADER}: avc:( +)?%{AUDITD_AVC_INTERACTION_STATUS:interaction_status}%{DATA}name=%{QUOTEDSTRING} %{GREEDYDATA:aux8}

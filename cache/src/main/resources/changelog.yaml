@@ -1,0 +1,1846 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 1.0.0/1
+      author: zaytsev
+      changes:
+        - createTable:
+            tableName: device_vendors
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - createTable:
+            tableName: device_categories
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - createTable:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+        - createTable:
+            tableName: device_types
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: dev_type
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: product
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: version
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vendor_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sub_category_id
+                  type: integer
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 1.0.0/2
+      author: zaytsev
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: vendor_id
+            baseTableName: device_types
+            constraintName: fk_dev_types_to_vendors
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: device_vendors
+        - addForeignKeyConstraint:
+            baseColumnNames: category_id
+            baseTableName: device_types
+            constraintName: fk_dev_types_to_categories
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: device_categories
+        - addForeignKeyConstraint:
+            baseColumnNames: sub_category_id
+            baseTableName: device_types
+            constraintName: fk_dev_types_to_sub_categories
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: device_sub_categories
+
+  - changeSet:
+      id: 1.0.0/3
+      author: zaytsev
+      changes:
+        - insert:
+            tableName: device_vendors
+            columns:
+              - column:
+                  name: name
+                  value: Microsoft
+        - insert:
+            tableName: device_vendors
+            columns:
+              - column:
+                  name: name
+                  value: Network
+        - insert:
+            tableName: device_vendors
+            columns:
+              - column:
+                  name: name
+                  value: Fortinet
+        - insert:
+            tableName: device_vendors
+            columns:
+              - column:
+                  name: name
+                  value: Cisco
+        - insert:
+            tableName: device_vendors
+            columns:
+              - column:
+                  name: name
+                  value: Mikrotik
+        - insert:
+            tableName: device_vendors
+            columns:
+              - column:
+                  name: name
+                  value: IBM
+        - insert:
+            tableName: device_vendors
+            columns:
+              - column:
+                  name: name
+                  value: Apache
+        - insert:
+            tableName: device_categories
+            columns:
+              - column:
+                  name: name
+                  value: Infrastructure
+        - insert:
+            tableName: device_categories
+            columns:
+              - column:
+                  name: name
+                  value: Network
+        - insert:
+            tableName: device_categories
+            columns:
+              - column:
+                  name: name
+                  value: Application
+        - insert:
+            tableName: device_categories
+            columns:
+              - column:
+                  name: name
+                  value: Security
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: OS
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: Virtualization
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: Management
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: Database
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: DNS
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: DHCP
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: Proxy
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: Switch
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: Financial
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: IDS
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: IPS
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: Firewall
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: Integrity
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: name
+                  value: Access
+
+  - changeSet:
+      id: 1.0.0/4
+      author: zaytsev
+      changes:
+        - createTable:
+            tableName: organizations
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: short_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: name
+                  type: varchar(1000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active_from
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active_to
+                  type: timestamp
+                  constraints:
+                    nullable: true
+        - createTable:
+            tableName: parsers
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: version
+                  type: integer
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: event_parsers
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: org_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: parser_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: device_type_id
+                  type: integer
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 1.0.0/5
+      author: zaytsev
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: parser_id
+            baseTableName: event_parsers
+            constraintName: fk_evt_parsers_to_parsers
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: parsers
+        - addForeignKeyConstraint:
+            baseColumnNames: org_id
+            baseTableName: event_parsers
+            constraintName: fk_evt_parsers_to_org
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: organizations
+        - addForeignKeyConstraint:
+            baseColumnNames: device_type_id
+            baseTableName: event_parsers
+            constraintName: fk_evt_parsers_to_dev_types
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: device_types
+
+  - changeSet:
+      id: 1.0.0/6
+      author: zaytsev
+      changes:
+        - createTable:
+            tableName: validators
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: version
+                  type: integer
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: event_validators
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: org_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: validator_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: device_type_id
+                  type: integer
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 1.0.0/7
+      author: zaytsev
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: validator_id
+            baseTableName: event_validators
+            constraintName: fk_evt_validators_to_validators
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: validators
+        - addForeignKeyConstraint:
+            baseColumnNames: org_id
+            baseTableName: event_validators
+            constraintName: fk_evt_validators_to_org
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: organizations
+        - addForeignKeyConstraint:
+            baseColumnNames: device_type_id
+            baseTableName: event_validators
+            constraintName: fk_evt_validators_to_dev_types
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: device_types
+
+  - changeSet:
+      id: 1.0.0/8
+      author: zaytsev
+      changes:
+        - createTable:
+            tableName: mappers
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: version
+                  type: integer
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: event_mappers
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: org_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mapper_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: device_type_id
+                  type: integer
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 1.0.0/9
+      author: zaytsev
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: mapper_id
+            baseTableName: event_mappers
+            constraintName: fk_evt_mappers_to_mappers
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: mappers
+        - addForeignKeyConstraint:
+            baseColumnNames: org_id
+            baseTableName: event_mappers
+            constraintName: fk_evt_mappers_to_org
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: organizations
+        - addForeignKeyConstraint:
+            baseColumnNames: device_type_id
+            baseTableName: event_mappers
+            constraintName: fk_evt_mappers_to_dev_types
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: device_types
+
+  - changeSet:
+      id: 1.0.0/10
+      author: zaytsev
+      changes:
+        - insert:
+            tableName: parsers
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: fortigate
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: validators
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: fortigate
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: mappers
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: fortigate
+              - column:
+                  name: version
+                  value: 1
+
+  - changeSet:
+      id: 1.0.0/11
+      author: zaytsev
+      changes:
+        - insert:
+            tableName: parsers
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: unicon
+              - column:
+                  name: version
+                  value: 1
+
+  - changeSet:
+      id: 1.0.0/12
+      author: zaytsev
+      changes:
+        - insert:
+            tableName: validators
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: kaspersky
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: mappers
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: kaspersky
+              - column:
+                  name: version
+                  value: 1
+
+  - changeSet:
+      id: 1.0.0/13
+      author: zaytsev
+      changes:
+        - insert:
+            tableName: device_vendors
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: name
+                  value: Kaspersky
+        - insert:
+            tableName: device_sub_categories
+            columns:
+              - column:
+                  name: id
+                  value: 15
+              - column:
+                  name: name
+                  value: Antivirus
+        - insert:
+            tableName: device_types
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: dev_type
+                  value: fortigate02501
+              - column:
+                  name: product
+                  value: Fortigate
+              - column:
+                  name: version
+                  value: 1
+              - column:
+                  name: vendor_id
+                  value: 3
+              - column:
+                  name: category_id
+                  value: 2
+              - column:
+                  name: sub_category_id
+                  value: 12
+        - insert:
+            tableName: device_types
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: dev_type
+                  value: uniconkasperskyv01
+              - column:
+                  name: product
+                  value: Kaspersky Antivirus
+              - column:
+                  name: version
+                  value: 1
+              - column:
+                  name: vendor_id
+                  value: 3
+              - column:
+                  name: category_id
+                  value: 4
+              - column:
+                  name: sub_category_id
+                  value: 15
+  - changeSet:
+      id: 1.0.0/14
+      author: shcherbakov
+      changes:
+        - createTable:
+            tableName: archiver_update_history
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: table_name
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_update_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 1.0.0/15
+      author: morozov
+      changes:
+        - createTable:
+            tableName: ip_geo_info
+            columns:
+              - column:
+                  name: city
+                  type: varchar(256)
+              - column:
+                  name: country
+                  type: varchar(256)
+              - column:
+                  name: org
+                  type: varchar(256)
+              - column:
+                  name: description
+                  type: varchar(256)
+              - column:
+                  name: network
+                  type: varchar(50)
+  - changeSet:
+      id: 1.0.0/16
+      author: morozov
+      changes:
+        - renameTable:
+            oldTableName: ip_geo_info
+            newTableName: geoinfo_city
+        - addColumn:
+            tableName: geoinfo_city
+            columns:
+              - column:
+                  name: load_id
+                  type: integer
+        - createTable:
+            tableName: geoinfo_country
+            columns:
+              - column:
+                  name: country
+                  type: varchar(256)
+              - column:
+                  name: org
+                  type: varchar(256)
+              - column:
+                  name: description
+                  type: varchar(256)
+              - column:
+                  name: network
+                  type: varchar(50)
+              - column:
+                  name: load_id
+                  type: integer
+        - createView:
+            selectQuery: select network,city,country,org,description from geoinfo_city as gic where load_id=(select max(load_id) from geoinfo_city where network=gic.network)
+            viewName:  v_geoinfo_city
+        - createView:
+            selectQuery: select network,country,org,description from geoinfo_country as gic where load_id=(select max(load_id) from geoinfo_country where network=gic.network)
+            viewName:  v_geoinfo_country
+        - createSequence:
+            sequenceName: geo
+            startValue:  1
+
+
+  - changeSet:
+      id: 1.0.0/17
+      author: shcherbakov
+      changes:
+        - createTable:
+            tableName: schedule_groups
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: group_name
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: schedule
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: group_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time_from
+                  type: time
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time_to
+                  type: time
+                  constraints:
+                    nullable: false
+              - column:
+                  name: days_work
+                  type: tinyint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: days_weekend
+                  type: tinyint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_calendar
+                  type: boolean
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: logins
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: login
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: org_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_name
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: group_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(256)
+              - column:
+                  name: email
+                  type: varchar(256)
+              - column:
+                  name: monitored
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_domain
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_work
+                  type: timestamp
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 1.0.0/18
+      author: shcherbakov
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: group_id
+            baseTableName: logins
+            constraintName: fk_logins_to_schedule_groups
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: schedule_groups
+
+        - addForeignKeyConstraint:
+            baseColumnNames: group_id
+            baseTableName: schedule
+            constraintName: fk_schedule_to_schedule_groups
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: schedule_groups
+
+        - addUniqueConstraint:
+            columnNames: login, org_id
+            constraintName: login_org_id_unique_constraint
+            deferrable: false
+            initiallyDeferred: false
+            tableName: logins
+
+  - changeSet:
+      id: 1.0.0/19
+      author: shcherbakov
+      changes:
+        - update:
+            columns:
+              - column:
+                  name: vendor_id
+                  value: 8
+            tableName: device_types
+            where: dev_type='uniconkasperskyv01'
+
+  - changeSet:
+      id: 1.0.0/20
+      author: morozov
+      changes:
+        - dropView:
+            viewName:  v_geoinfo_city
+        - dropView:
+            viewName:  v_geoinfo_country
+        - createView:
+            selectQuery: SELECT gic.city, gic.country, gic.description as org, gic.org as org_id, string_agg(gic.network::text, ';'::text) AS networks FROM geoinfo_city gic WHERE gic.load_id = (( SELECT max(geoinfo_city.load_id) AS max FROM geoinfo_city)) GROUP BY gic.city, gic.country, gic.description, gic.org
+            viewName:  v_geoinfo_city
+        - createView:
+            selectQuery: SELECT gic.country, gic.description as org, gic.org as org_id, string_agg(gic.network::text, ';'::text) AS networks FROM geoinfo_country gic WHERE gic.load_id = (( SELECT max(geoinfo_country.load_id) AS max FROM geoinfo_country)) GROUP BY gic.country, gic.description, gic.org
+            viewName:  v_geoinfo_country
+
+  - changeSet:
+      id: 1.0.0/21
+      author: morozov
+      changes:
+        - createTable:
+            tableName: hosts
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: hostname
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: org_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_name
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: host_ip
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: added
+                  type: timestamp
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: rules
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: subject
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: source
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: destination
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: object
+                  type: integer
+              - column:
+                  name: result
+                  type: integer
+              - column:
+                  name: use_case_id
+                  type: varchar(256)
+        - addForeignKeyConstraint:
+            baseColumnNames: subject
+            baseTableName: rules
+            constraintName: fk_rules_subject_to_logins
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: logins
+        - addForeignKeyConstraint:
+            baseColumnNames: source
+            baseTableName: rules
+            constraintName: fk_rules_source_to_hosts
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: hosts
+        - addForeignKeyConstraint:
+            baseColumnNames: destination
+            baseTableName: rules
+            constraintName: fk_rules_destination_to_hosts
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: hosts
+
+  - changeSet:
+      id: 1.0.0/22
+      author: volkov
+      changes:
+        - insert:
+            tableName: device_types
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: dev_type
+                  value: Windows2k8Security00001
+              - column:
+                  name: product
+                  value: Windows 2008
+              - column:
+                  name: version
+                  value: 1
+              - column:
+                  name: vendor_id
+                  value: 1
+              - column:
+                  name: category_id
+                  value: 1
+              - column:
+                  name: sub_category_id
+                  value: 1
+        - insert:
+            tableName: validators
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: windows_security
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: mappers
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: windows_security
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: parsers
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: windows_security
+              - column:
+                  name: version
+                  value: 1
+
+  - changeSet:
+      id: 1.0.0/23
+      author: shcherbakov
+      changes:
+        - createTable:
+            tableName: py_scripts
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: script
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: method_name
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: 1.0.0/24
+      author: zaytsev
+      changes:
+        - insert:
+            tableName: device_vendors
+            columns:
+              - column:
+                  name: id
+                  value: 9
+              - column:
+                  name: name
+                  value: Symantec
+        - insert:
+            tableName: device_types
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: dev_type
+                  value: uniconsymantecv01
+              - column:
+                  name: product
+                  value: Symantec Endpoint Protection
+              - column:
+                  name: version
+                  value: 1
+              - column:
+                  name: vendor_id
+                  value: 9
+              - column:
+                  name: category_id
+                  value: 4
+              - column:
+                  name: sub_category_id
+                  value: 15
+        - insert:
+            tableName: device_types
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: dev_type
+                  value: uniconsymantecv01t
+              - column:
+                  name: product
+                  value: Symantec Endpoint Protection
+              - column:
+                  name: version
+                  value: 1
+              - column:
+                  name: vendor_id
+                  value: 9
+              - column:
+                  name: category_id
+                  value: 4
+              - column:
+                  name: sub_category_id
+                  value: 15
+        - insert:
+            tableName: validators
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: name
+                  value: symantec
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: mappers
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: name
+                  value: symantec
+              - column:
+                  name: version
+                  value: 1
+  - changeSet:
+      id: 1.0.0/25
+      author: zaytsev
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            tableName: archiver_update_history
+
+  - changeSet:
+      id: 1.0.0/26
+      author: morozov
+      changes:
+        - insert:
+            tableName: device_types
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: dev_type
+                  value: asa00401
+              - column:
+                  name: product
+                  value: Cisco ASA 401
+              - column:
+                  name: version
+                  value: 1
+              - column:
+                  name: vendor_id
+                  value: 4
+              - column:
+                  name: category_id
+                  value: 2
+              - column:
+                  name: sub_category_id
+                  value: 12
+        - insert:
+            tableName: validators
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: name
+                  value: asa00401
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: mappers
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: name
+                  value: asa00401
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: parsers
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: name
+                  value: asa00401
+              - column:
+                  name: version
+                  value: 1
+  - changeSet:
+      id: 1.0.0/27
+      author: morozov
+      changes:
+        - createTable:
+            tableName: objects
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: obj_type
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: obj_path
+                  type: text
+              - column:
+                  name: obj_name
+                  type: text
+              - column:
+                  name: port
+                  type: integer
+
+        - addForeignKeyConstraint:
+            baseColumnNames: object
+            baseTableName: rules
+            constraintName: fk_rules_object_to_objects
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: objects
+        - renameTable:
+            oldTableName: logins
+            newTableName: subject
+        -  dropNotNullConstraint:
+            tableName: hosts
+            columnName: hostname
+        -  renameColumn:
+            tableName: hosts
+            oldColumnName: hostname
+            newColumnName: host_name
+        -  dropNotNullConstraint:
+            tableName: hosts
+            columnName: host_ip
+        - addColumn:
+            tableName: hosts
+            columns:
+              - column:
+                  name: description
+                  type: text
+        - addColumn:
+            tableName: subject
+            columns:
+              - column:
+                  name: domain
+                  type: varchar(256)
+        -  dropNotNullConstraint:
+            tableName: rules
+            columnName: source
+        -  dropNotNullConstraint:
+            tableName: rules
+            columnName: destination
+        - addColumn:
+            tableName: rules
+            columns:
+              - column:
+                  name: type
+                  type: varchar(256)
+              - column:
+                  name: schedule
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: org_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: aux1
+                  type: text
+              - column:
+                  name: aux2
+                  type: text
+        - addForeignKeyConstraint:
+            baseTableName: rules
+            baseColumnNames: schedule
+            constraintName: fk_rules_schedule_to_schedule_groups
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedTableName: schedule_groups
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: rules
+            baseColumnNames: org_id
+            constraintName: fk_rules_org_id_to_organizations
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: RESTRICT
+            onUpdate: NO ACTION
+            referencedTableName: organizations
+            referencedColumnNames: id
+        -  dropNotNullConstraint:
+             tableName: hosts
+             columnName: user_name
+        - dropUniqueConstraint:
+            tableName: subject
+            constraintName: login_org_id_unique_constraint
+        - addUniqueConstraint:
+            columnNames: login, org_id, domain
+            constraintName: login_org_id_domain_unique_constraint
+            deferrable: false
+            initiallyDeferred: false
+            tableName: subject
+        - delete:
+            tableName: rules
+        - delete:
+            tableName: hosts
+        - delete:
+            tableName: subject
+  - changeSet:
+      id: 1.0.1/1
+      author: zaytsev
+      changes:
+        - update:
+            columns:
+              - column:
+                  name: version
+                  value: 2
+            tableName: mappers
+            where: name='kaspersky'
+  - changeSet:
+      id: 1.0.2/1
+      author: morozov
+      changes:
+        - update:
+            columns:
+              - column:
+                  name: version
+                  value: 2
+            tableName: mappers
+            where: name='windows_security'
+        - update:
+            columns:
+              - column:
+                  name: version
+                  value: 2
+            tableName: validators
+            where: name='windows_security'
+  - changeSet:
+      id: 1.1.0/1
+      author: morozov
+      changes:
+        -  dropNotNullConstraint:
+             tableName: rules
+             columnName: subject
+  - changeSet:
+      id: 1.1.0/2
+      author: morozov
+      changes:
+        - insert:
+            tableName: validators
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: name
+                  value: reassembledAuditD01
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: mappers
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: name
+                  value: reassembledAuditD01
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: parsers
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: name
+                  value: reassembledAuditD01
+              - column:
+                  name: version
+                  value: 1
+  - changeSet:
+      id: 1.1.0/3
+      author: morozov
+      changes:
+        - insert:
+            tableName: validators
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: name
+                  value: esetnode02701
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: mappers
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: name
+                  value: esetnode02701
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: parsers
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: name
+                  value: esetnode02701
+              - column:
+                  name: version
+                  value: 1
+  - changeSet:
+      id: 1.1.0/4
+      author: zaytsev
+      changes:
+        - insert:
+            tableName: device_vendors
+            columns:
+              - column:
+                  name: id
+                  value: 10
+              - column:
+                  name: name
+                  value: GNU
+        - insert:
+            tableName: device_types
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: dev_type
+                  value: reassembledAuditD01
+              - column:
+                  name: product
+                  value: Auditd
+              - column:
+                  name: version
+                  value: 1
+              - column:
+                  name: vendor_id
+                  value: 10
+              - column:
+                  name: category_id
+                  value: 1
+              - column:
+                  name: sub_category_id
+                  value: 1
+        - insert:
+            tableName: device_vendors
+            columns:
+              - column:
+                  name: id
+                  value: 11
+              - column:
+                  name: name
+                  value: Eset
+        - insert:
+            tableName: device_types
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: dev_type
+                  value: esetnode02701
+              - column:
+                  name: product
+                  value: Nod32
+              - column:
+                  name: version
+                  value: 1
+              - column:
+                  name: vendor_id
+                  value: 11
+              - column:
+                  name: category_id
+                  value: 4
+              - column:
+                  name: sub_category_id
+                  value: 15
+  - changeSet:
+      id: 1.2.0/1
+      author: morozov
+      changes:
+        - insert:
+            tableName: validators
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: name
+                  value: fail2ban02901
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: mappers
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: name
+                  value: fail2ban02901
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: parsers
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: name
+                  value: fail2ban02901
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: device_vendors
+            columns:
+              - column:
+                  name: id
+                  value: 12
+              - column:
+                  name: name
+                  value: Github
+        - insert:
+            tableName: device_types
+            columns:
+              - column:
+                  name: id
+                  value: 9
+              - column:
+                  name: dev_type
+                  value: fail2ban02901
+              - column:
+                  name: product
+                  value: Fail2Ban
+              - column:
+                  name: version
+                  value: 1
+              - column:
+                  name: vendor_id
+                  value: 12
+              - column:
+                  name: category_id
+                  value: 3
+              - column:
+                  name: sub_category_id
+                  value: 14
+  - changeSet:
+      id: 1.2.0/2
+      author: zaytsev
+      changes:
+        - dropColumn:
+            columnName: org_id
+            tableName: rules
+        - dropNotNullConstraint:
+            columnName: login
+            tableName: subject
+        - dropNotNullConstraint:
+            columnName: user_name
+            tableName: subject
+        - dropNotNullConstraint:
+            columnName: user_domain
+            tableName: subject
+  - changeSet:
+      id: 1.2.0/3
+      author: morozov
+      changes:
+        - insert:
+            tableName: validators
+            columns:
+              - column:
+                  name: id
+                  value: 9
+              - column:
+                  name: name
+                  value: ios/isr00401
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: mappers
+            columns:
+              - column:
+                  name: id
+                  value: 9
+              - column:
+                  name: name
+                  value: ios/isr00401
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: parsers
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: name
+                  value: ios/isr00401
+              - column:
+                  name: version
+                  value: 1
+        - insert:
+            tableName: device_types
+            columns:
+              - column:
+                  name: id
+                  value: 10
+              - column:
+                  name: dev_type
+                  value: ios00401
+              - column:
+                  name: product
+                  value: Cisco IOS
+              - column:
+                  name: version
+                  value: 1
+              - column:
+                  name: vendor_id
+                  value: 4
+              - column:
+                  name: category_id
+                  value: 2
+              - column:
+                  name: sub_category_id
+                  value: 12
+        - insert:
+            tableName: device_types
+            columns:
+              - column:
+                  name: id
+                  value: 11
+              - column:
+                  name: dev_type
+                  value: isr00401
+              - column:
+                  name: product
+                  value: Cisco ISR
+              - column:
+                  name: version
+                  value: 1
+              - column:
+                  name: vendor_id
+                  value: 4
+              - column:
+                  name: category_id
+                  value: 2
+              - column:
+                  name: sub_category_id
+                  value: 12
+  - changeSet:
+      id: 1.2.0/4
+      author: morozov
+      changes:
+        - update:
+            columns:
+              - column:
+                  name: product
+                  value: Cisco ASA
+            tableName: mappers
+            where: id=6

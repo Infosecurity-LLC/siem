@@ -1,0 +1,13 @@
+isSOC SIEM
+Copyright 2021 Infosecurity LLC
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+This product bundles ip-radix-tree 1.0, which is available under an Apache 2.0 License
+The Initial Developer of the streamers/enricher/src/main/scala/ru/gkis/soc/siem/enricher/cache/radixtree
+is Jeff Yang (https://github.com/highfei2011/ip-radix-tree)
+
+This product bundles interval-tree, which is available under an MIT License
+The Initial Developer of the streamers/enricher/src/main/scala/ru/gkis/soc/siem/enricher/cache/intervaltree
+is Charlotte A Lai (https://github.com/charcuterie/interval-tree)

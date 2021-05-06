@@ -1,0 +1,2 @@
+INT (?:[+-]?(?:[0-9]+))
+TIMESTAMP %{INT}.%{INT}

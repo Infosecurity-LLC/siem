@@ -1,0 +1,1 @@
+java -cp kafka-player.jar ru.gkis.soc.siem.utils.KafkaPlayer "$@"

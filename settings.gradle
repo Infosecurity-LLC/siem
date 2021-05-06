@@ -1,0 +1,3 @@
+rootProject.name = 'siem'
+
+include 'cache', 'common', "streamers:enricher", "streamers:ingester", "streamers:normalizer", "streamers:downloader", "utils:player", "utils:reset", "streamers:archiver", "streamers:monitor", "streamers:filter", "streamers:reassembler", "streamers:router", "utils:control-uploader"

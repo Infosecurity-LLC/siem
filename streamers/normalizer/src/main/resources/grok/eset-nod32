@@ -1,0 +1,6 @@
+# common
+GREEDYDATA .*
+USERNAME [a-zA-Z0-9._-]+
+# audit_event
+ESET_USER_AND_DOMAIN %{GREEDYDATA:parsed_domain}\\%{GREEDYDATA:parsed_username}
+ESET_AUDIT_EVENT %{GREEDYDATA}'%{USERNAME:parsed_username}'

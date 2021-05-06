@@ -1,0 +1,1 @@
+AUDITD_HEADER audit\(%{TIMESTAMP:timestamp}:%{INT:id}\)

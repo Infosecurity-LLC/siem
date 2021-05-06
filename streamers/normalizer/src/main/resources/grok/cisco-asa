@@ -1,0 +1,52 @@
+# Cisco ASA
+# = common =
+CISCO_TIMESTAMP %{MONTH:month} +%{MONTHDAY:day}(?: %{YEAR:year})? %{TIME:time}( %{TZ:timezone})?
+CISCO_BEGIN ( )?(<%{INT}>)?(%{INT})?(:)?( )?
+CISCO_MAYBE_IP ( %{IP})?( )?(:)?
+CISCO_SOURCE_IMP_ID %%{WORD:eventSourceSubsys}(-auth|-sys|-config|-session|-vpnc)?-%{INT:interactionImportance}
+CISCO_HEAD %{CISCO_BEGIN}%{CISCO_TIMESTAMP:originTime}%{CISCO_MAYBE_IP} (:)?%{CISCO_SOURCE_IMP_ID}-%{INT:datapayloadMsgId}
+CISCO_USER_OR_STARS %{WORD}|\*{5}
+CISCO_USER user = %{CISCO_USER_OR_STARS:subjectName}
+CISCO_WORD \b[\w\-]+\b
+# Extract message ID
+CISCOASA_ID %(%{WORD})(-auth|-sys|-config|-session|-vpnc)?-%{INT}-%{INT:id}
+# ASA-113004
+CISCOASA_113004 %{CISCO_HEAD}: AAA user (authentication|accounting) Successful : server =  %{IPORHOST:aux1} : %{CISCO_USER}
+# ASA-113012
+CISCOASA_113012 %{CISCO_HEAD}: AAA user authentication Successful : local database : %{CISCO_USER}
+# ASA-113015
+CISCOASA_113015 %{CISCO_HEAD}: AAA user authentication Rejected : reason = %{GREEDYDATA:interactionReason} : local database : %{CISCO_USER}( : user IP = %{IP:sourceLocationIp})?
+# ASA-605005
+CISCOASA_605005 %{CISCO_HEAD}: Login permitted from ((serial to console)|%{IP:sourceLocationIp}/%{INT:sourceLocationPort} to %{WORD}:%{IP:destinationLocationIp}/%{WORD:aux10}) for user "%{CISCO_USER_OR_STARS:subjectName}"
+# ASA-611101
+CISCOASA_611101 %{CISCO_HEAD}: User authentication succeeded: Uname: %{CISCO_USER_OR_STARS:subjectName}
+# ASA-111008
+CISCOASA_111008 %{CISCO_HEAD}: User '%{CISCO_USER_OR_STARS:subjectName}' executed the '%{GREEDYDATA:command}' command.
+# ASA-111010
+CISCOASA_111010 %{CISCO_HEAD}: User '%{CISCO_USER_OR_STARS:subjectName}', running '%{GREEDYDATA}' from IP %{IP:sourceLocationIp}, executed '%{GREEDYDATA:command}'
+# ASA-106002
+# CISCOASA_106002
+# ASA-106023
+CISCOASA_106023 %{CISCO_BEGIN}%{CISCO_TIMESTAMP:originTime}%{CISCO_MAYBE_IP}( Abc-ASA)? (:)?( )?%{CISCO_SOURCE_IMP_ID}-%{INT:datapayloadMsgId}: Deny (protocol )?%{WORD:interactionProtocol}? src %{CISCO_WORD:dataPayloadInterface}:%{IPORHOST:sourceLocationIp}(/%{INT:sourceLocationPort})? dst %{CISCO_WORD:aux1}:%{IPORHOST:destinationLocationIp}(/%{INT:destinationLocationPort})?(%{GREEDYDATA})?( \(type %{INT}, code %{INT}\))? by access-group "%{CISCO_WORD:aux10}"
+# ASA-710003
+CISCOASA_710003 %{CISCO_BEGIN}%{CISCO_TIMESTAMP:originTime}( %{CISCO_WORD:t})? : %{CISCO_SOURCE_IMP_ID}-%{INT:datapayloadMsgId}: %{WORD:interactionProtocol} access denied by ACL from %{IPORHOST:sourceLocationIp}(/%{INT:sourceLocationPort})? to outside:%{IPORHOST:destinationLocationIp}(/%{INT:destinationLocationPort})
+# ASA-104001
+CISCOASA_104001 %{CISCO_HEAD}: \(Secondary\) Switching to ACTIVE - %{GREEDYDATA:interactionReason}
+# ASA-104002
+CISCOASA_104002 %{CISCO_HEAD}: \(Primary\) Switching to STNDBY - %{GREEDYDATA:interactionReason}
+# ASA-105005
+CISCOASA_105005 %{CISCO_HEAD}: \(Secondary\) %{GREEDYDATA:interactionReason}
+# ASA-105008
+CISCOASA_105008 %{CISCO_HEAD}:
+# ASA-105009
+CISCOASA_105009 %{CISCO_HEAD}: \(%{USERNAME}\) Testing on (i|I)nterface %{WORD:objectValue}( Status)? %{WORD:interactionStatus}
+# ASA-106001
+CISCOASA_106001 %{CISCO_BEGIN}%{CISCO_TIMESTAMP:originTime}( %{USERNAME} )?%{CISCO_MAYBE_IP} (:)?%{CISCO_SOURCE_IMP_ID}-%{INT:datapayloadMsgId}: Inbound TCP connection denied from %{IP:sourceLocationIp}/%{INT:sourceLocationPort} to %{IP:destinationLocationIp}/%{INT:destinationLocationPort} flags %{GREEDYDATA} on interface %{USERNAME:objectName}
+# ASA-106006
+CISCOASA_106006 %{CISCO_BEGIN}%{CISCO_TIMESTAMP:originTime}( %{USERNAME} )?%{CISCO_MAYBE_IP} (:)?%{CISCO_SOURCE_IMP_ID}-%{INT:datapayloadMsgId}: Deny inbound UDP from %{IP:sourceLocationIp}/%{INT:sourceLocationPort} to %{IP:destinationLocationIp}/%{INT:destinationLocationPort} on interface %{USERNAME:objectName}
+# ASA-106007
+CISCOASA_106007 %{CISCO_BEGIN}%{CISCO_TIMESTAMP:originTime}( %{USERNAME} )?%{CISCO_MAYBE_IP} (:)?%{CISCO_SOURCE_IMP_ID}-%{INT:datapayloadMsgId}: Deny inbound UDP from %{IP:sourceLocationIp}/%{INT:sourceLocationPort} to %{IP:destinationLocationIp}/%{INT:destinationLocationPort}
+# ASA-106011
+CISCOASA_106011 %{CISCO_BEGIN}%{CISCO_TIMESTAMP:originTime}( %{USERNAME} )?%{CISCO_MAYBE_IP} (:)?%{CISCO_SOURCE_IMP_ID}-%{INT:datapayloadMsgId}: Deny inbound \(No xlate\) %{WORD:interactionProtocol} src %{USERNAME:objectName}:%{IP:sourceLocationIp}(/%{INT:sourceLocationPort})? dst %{USERNAME:subjectName}:%{IP:destinationLocationIp}(/%{INT:destinationLocationPort})?( \(%{GREEDYDATA:aux4}, %{GREEDYDATA:aux5}\))?
+# ASA-106014
+CISCOASA_106014 %{CISCO_BEGIN}%{CISCO_TIMESTAMP:originTime}( %{USERNAME} )?%{CISCO_MAYBE_IP} (:)?%{CISCO_SOURCE_IMP_ID}-%{INT:datapayloadMsgId}: Deny inbound %{WORD:objectName} src %{USERNAME}:%{IP:sourceLocationIp}(/%{INT:sourceLocationPort})? dst %{USERNAME}:%{IP:destinationLocationIp}(/%{INT:destinationLocationPort})?( \(%{GREEDYDATA:aux4}, %{GREEDYDATA:aux5}\))?

@@ -1,0 +1,7 @@
+# Message header
+CISCO_IOS_ISR_HEADER %{USERNAME}-%{POSINT:importance}-%{USERNAME:eventType}
+# Specific mappings
+CISCO_IOS_ISR_LOGIN \%%{CISCO_IOS_ISR_HEADER:msgId}: %{GREEDYDATA} \[user: %{USERNAME:subjectName}?\] \[source: %{IP:sourceIp}\] \[localport: %{INT:destinationPort}\]( \[reason: %{GREEDYDATA:interactionReason}\])? at %{TIME:time} %{WORD:timezone} %{WORD} %{WORD:month} %{INT:day} %{YEAR:year}
+CISCO_IOS_ISR_SSH2 %{WORD:month} %{INT:day} %{TIME:time} %{WORD:timezone}: \%%{CISCO_IOS_ISR_HEADER:msgId}: user '(%{USERNAME:subjectName})?' authentication for ssh2 session from %{IP:sourceIp} %{GREEDYDATA} %{WORD:status}
+CISCO_IOS_ISR_LOGOUT %{WORD:month} %{INT:day} %{TIME:time} %{WORD:timezone}: \%%{CISCO_IOS_ISR_HEADER:msgId}: user %{USERNAME:subjectName} has exited tty session %{INT}\(%{IP:sourceIp}\)
+CISCO_IOS_ISR_CONFIG_I %{WORD:month} ( )?%{INT:day} %{TIME:time}( %{WORD:timezone})?: \%%{CISCO_IOS_ISR_HEADER:msgId}: (r%{INT}/%{INT}: %{WORD:objectName}: )?configured from %{GREEDYDATA:aux1} by (%{USERNAME:subjectName}( on|,) %{USERNAME})?( \(%{IP:sourceIp}\))?( %{INT:aux2})?

@@ -1,0 +1,354 @@
+plugins {
+    id 'scala'
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "5.2.0"
+    id 'org.liquibase.gradle' version '2.0.4'
+    id 'distribution'
+    id 'maven-publish'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+allprojects {
+    apply plugin: 'scala'
+    apply plugin: 'java'
+    apply plugin: 'distribution'
+    apply plugin: 'org.liquibase.gradle'
+
+    repositories {
+        mavenLocal()
+        maven {
+            url mavenCentralMirror
+        }
+        maven {
+            url jCenterMirror
+        }
+        maven {
+            url releasesRepoUrl
+        }
+        maven {
+            url snapshotsRepoUrl
+        }
+    }
+
+    tasks.withType(ScalaCompile) {
+        scalaCompileOptions.additionalParameters = ['-Xfatal-warnings', '-feature', '-deprecation:false']
+    }
+
+    dependencies {
+        // all modules dependecies
+        compile group: 'org.scala-lang', name: 'scala-library'
+
+        testCompile group: 'junit',         name: 'junit'
+        testCompile group: 'org.scalatest', name: 'scalatest_2.11'
+
+        // dependencies *version* constraints
+        constraints {
+            compile group: 'com.typesafe.scala-logging', name: 'scala-logging_2.11',              version: '3.9.2'
+            compile group: 'com.typesafe',               name: 'config',                          version: '1.3.4'
+            compile group: 'ch.qos.logback',             name: 'logback-classic',                 version: '1.2.3'
+            compile group: 'org.scala-lang',             name: 'scala-library',                   version: '2.11.12'
+            compile group: 'org.scala-lang',             name: 'scala-reflect',                   version: '2.11.12'
+            compile group: 'org.apache.spark',           name: 'spark-streaming_2.11',            version: '2.3.0'
+            compile group: 'org.apache.spark',           name: 'spark-streaming-kafka-0-10_2.11', version: '2.3.0'
+            compile group: 'org.apache.spark',           name: 'spark-sql_2.11',                  version: '2.3.0'
+            compile group: 'org.apache.spark',           name: 'spark-sql-kafka-0-10_2.11',       version: '2.3.0'
+            compile group: 'com.github.lonely-lockley',  name: 'ltsv-parser',                     version: '1.0.0'
+            compile group: 'org.gnu',                    name: 'gnu-crypto',                      version: '2.0.1'
+            compile group: 'org.scala-lang.modules',     name: 'scala-java8-compat_2.11',         version: '0.9.0'
+            compile group: 'io.getquill',                name: 'quill-jdbc_2.11',                 version: '3.4.10'
+            compile group: 'org.postgresql',             name: 'postgresql',                      version: '42.2.5'
+            compile group: 'org.eclipse.jetty',          name: 'jetty-server',                    version: '9.4.21.v20190926'
+            compile group: 'org.elasticsearch',          name: 'elasticsearch-hadoop',            version: '7.4.2'
+            compile group: 'org.apache.hbase',           name: 'hbase-client',                    version: '1.3.0'
+            compile group: 'org.apache.spark',           name: 'spark-hive_2.11',                 version: '2.3.0'
+            compile group: 'org.apache.hbase',           name: 'hbase-server',                    version: '1.3.0'
+            compile group: 'com.izettle',                name: 'dropwizard-metrics-influxdb',     version: '1.2.3'
+            compile group: 'ru.gkis.soc.siem',           name: 'common-proto',                    version: '1.0.0',  classifier: 'scalapb'
+            compile group: 'commons-cli',                name: 'commons-cli',                     version: '1.4'
+            compile group: 'io.krakens',                 name: 'java-grok',                       version: '0.1.9'
+            compile group: 'net.sf.supercsv',            name: 'super-csv',                       version: '2.4.0'
+
+            testCompile group: 'junit',         name: 'junit',          version: '4.12'
+            testCompile group: 'org.scalatest', name: 'scalatest_2.11', version: '3.0.7'
+
+            liquibaseRuntime group: 'org.liquibase',  name: 'liquibase-core', version:'3.6.1'
+            liquibaseRuntime group: 'org.yaml',       name: 'snakeyaml',      version: '1.25'
+            liquibaseRuntime group: 'org.postgresql', name: 'postgresql',     version: '42.2.5'
+        }
+    }
+}
+
+subprojects {
+    task printDependencies(type: DependencyReportTask) {}
+}
+
+// common dependencies for all streamers
+configure(subprojects.findAll {it.path.startsWith(':streamers:')}) {
+    apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'maven-publish'
+
+    dependencies {
+        compile project(':cache')
+        compile project(path: ':common')
+        compile group: 'org.apache.spark', name: 'spark-streaming_2.11'
+        compile group: 'org.eclipse.jetty', name: 'jetty-server'
+    }
+
+    shadowJar {
+        zip64 = true
+        classifier = 'spark'
+        dependencies {
+            exclude(dependency('org.scala-lang:.*:.*'))
+        }
+    }
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allSource
+        classifier = 'sources'
+    }
+
+    task javadocJar(type: Jar) {
+        from javadoc
+        classifier = 'javadoc'
+    }
+
+    publishing {
+        repositories {
+            maven {
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = System.properties['nexus_user']
+                    password = System.properties['nexus_password']
+                }
+            }
+        }
+        publications {
+            maven(MavenPublication) {
+                artifact jar
+                artifact shadowJar
+                artifact sourcesJar
+                artifact javadocJar
+            }
+        }
+    }
+}
+
+configure(subprojects.findAll { it.path.startsWith(':utils:') }) {
+    apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'maven-publish'
+
+    dependencies {
+        compile project(':cache')
+        compile project(path: ':common')
+        compile group: 'commons-cli', name: 'commons-cli'
+        compile group: 'net.sf.supercsv', name: 'super-csv'
+    }
+
+    shadowJar {
+        zip64 = true
+        classifier = ''
+        archiveVersion = ''
+    }
+
+    publishing {
+        repositories {
+            maven {
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = System.properties['nexus_user']
+                    password = System.properties['nexus_password']
+                }
+            }
+        }
+    }
+}
+
+project(':utils:player') {
+    distributions {
+        player {
+            contents {
+                from 'src/main/resources/kafka-player.sh'
+                from tasks.shadowJar
+            }
+        }
+    }
+
+    shadowJar {
+        baseName = 'kafka-player'
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                artifact playerDistZip
+            }
+        }
+    }
+}
+
+project(':utils:reset') {
+    distributions {
+        reset {
+            contents {
+                from 'src/main/resources/kafka-reset.sh'
+                from tasks.shadowJar
+            }
+        }
+    }
+
+    shadowJar {
+        baseName = 'kafka-reset'
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                artifact resetDistZip
+            }
+        }
+    }
+}
+
+project(':utils:control-uploader') {
+    dependencies {
+        compile project(':common')
+        compile project(':cache')
+    }
+
+    distributions {
+        control {
+            contents {
+                from 'src/main/resources/win_authorization_20201116.csv'
+                from 'src/main/resources/win_catalog_access_20201215.csv'
+                from tasks.shadowJar
+            }
+        }
+    }
+
+    shadowJar {
+        baseName = 'control'
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                artifact controlDistZip
+            }
+        }
+    }
+}
+
+// per-project dependencies
+project(':common') {
+
+    dependencies {
+        compile group: 'ru.gkis.soc.siem',           name: 'common-proto',                    classifier: 'scalapb'
+        compile group: 'org.scala-lang.modules',     name: 'scala-java8-compat_2.11'
+        compile group: 'com.typesafe.scala-logging', name: 'scala-logging_2.11'
+        compile group: 'ch.qos.logback',             name: 'logback-classic'
+        compile group: 'org.gnu',                    name: 'gnu-crypto'
+        compile group: 'com.typesafe',               name: 'config'
+        compileOnly group: 'org.apache.spark',       name: 'spark-streaming_2.11'
+        compile group: 'org.apache.spark',           name: 'spark-streaming-kafka-0-10_2.11'
+        compile group: 'org.scala-lang.modules',     name: 'scala-java8-compat_2.11'
+        compile group: 'org.elasticsearch',          name: 'elasticsearch-hadoop'
+        compile group: 'org.apache.hbase',           name: 'hbase-client'
+        compile group: 'com.izettle', name: 'dropwizard-metrics-influxdb', {
+            exclude group: 'io.dropwizard.metrics', module: 'metrics-core'
+            exclude group: 'com.fasterxml.jackson.core', module: 'jackson-databind'
+            exclude group: 'org.apache.kafka', module: 'kafka-clients'
+        }
+    }
+
+}
+
+project(':cache') {
+    apply plugin: 'maven-publish'
+
+    dependencies {
+        compile project(':common')
+        compile group: 'io.getquill',    name: 'quill-jdbc_2.11'
+        compile group: 'org.postgresql', name: 'postgresql'
+
+        liquibaseRuntime group: 'org.liquibase',  name: 'liquibase-core'
+        liquibaseRuntime group: 'org.yaml',       name: 'snakeyaml'
+        liquibaseRuntime group: 'org.postgresql', name: 'postgresql'
+    }
+
+    liquibase {
+        activities {
+            //noinspection GroovyAssignabilityCheck
+            main {
+                changeLogFile 'src/main/resources/changelog.yaml'
+                url 'jdbc:postgresql://localhost/streamers'
+                username System.properties['liquibase_user']
+                password System.properties['liquibase_password']
+            }
+        }
+    }
+
+    distributions {
+        liquibase {
+            baseName = 'liquibase'
+            contents {
+                from 'src/main/resources/changelog.yaml'
+                from 'src/main/resources/liquibase.sh'
+                from 'src/main/resources/create_streamers_database.sql'
+                from 'src/main/resources/init_streamers_database.sh'
+                from project.configurations.liquibaseRuntime
+            }
+        }
+    }
+
+    publishing {
+        repositories {
+            maven {
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = System.properties['nexus_user']
+                    password = System.properties['nexus_password']
+                }
+            }
+        }
+        publications {
+            maven(MavenPublication) {
+                artifact liquibaseDistZip
+            }
+        }
+    }
+}
+
+project(':streamers:normalizer') {
+    dependencies {
+        compile group: 'com.github.lonely-lockley',  name: 'ltsv-parser'
+        compile group: 'io.krakens',                 name: 'java-grok'
+    }
+}
+
+project(':streamers:archiver') {
+    dependencies {
+        compile group: 'org.apache.hbase',          name: 'hbase-server'
+        compile group: 'org.apache.spark',          name: 'spark-sql_2.11'
+        compile group: 'org.apache.spark',          name: 'spark-hive_2.11'
+    }
+}
+
+project(':streamers:filter') {
+    dependencies {
+        compile group: 'org.python', name: 'jython-standalone', version: '2.7.0'
+    }
+}
+
+project(':streamers:reassembler') {
+    shadowJar {
+        mergeServiceFiles {
+        }
+    }
+    dependencies {
+        compile group: 'io.krakens',       name: 'java-grok'
+        compile group: 'org.apache.spark', name: 'spark-sql_2.11'
+        compile group: 'org.apache.spark', name: 'spark-sql-kafka-0-10_2.11'
+    }
+}

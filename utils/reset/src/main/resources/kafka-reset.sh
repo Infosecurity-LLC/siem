@@ -1,0 +1,1 @@
+java -cp kafka-reset.jar ru.gkis.soc.siem.utils.KafkaReset "$@"
